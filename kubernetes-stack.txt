@@ -1,0 +1,28 @@
+$ kubectl create namespace wordpress
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+$ helm upgrade --install wordpress bitnami/wordpress -f wordpress-values.yaml -n wordpress
+$ kubectl create namespace monitoring
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm upgrade --install prometheus-blackbox prometheus-community/prometheus-blackbox-exporter -f black-values.yaml -n monitoring
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm upgrade --install grafana prometheus-community/kube-prometheus-stack -f grafana-values.yaml  -n monitoring
+
+kubectl --namespace monitoring port-forward svc/grafana-kube-prometheus-st-prometheus 9090
+
+kubectl --namespace monitoring port-forward svc/grafana-kube-prometheus-st-alertmanager 9093   
+
+kubectl --namespace monitoring port-forward svc/grafana 8080:80
+
+username: admin
+password: prom-operator
+
+In the grafana-values.yaml file, replace the part:
+
+- targets:
+    - http://192.168.49.2:32264
+
+with the WordPress URL you see in your command line after running the minikube service list command.

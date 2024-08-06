@@ -1,0 +1,8 @@
+wordpressUsername: artifactusername
+wordpressPassword: artifactpassword
+wordpressEmail: contact@artifact.com
+wordpressFirstName: Artifact
+wordpressLastName: System
+wordpressBlogName: artifactsystem.com
+service: 
+  type: LoadBalancer
